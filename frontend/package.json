@@ -23,5 +23,9 @@
     "svelte-preprocess": "^4.10.7",
     "tailwindcss": "^3.1.5",
     "vite": "^4.0.0"
+  },
+  "dependencies": {
+    "@aws-amplify/auth": "^5.1.5",
+    "@aws-amplify/core": "^5.0.11"
   }
 }

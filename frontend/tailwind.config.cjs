@@ -4,10 +4,9 @@ const config = {
 		require('path').join(require.resolve('@skeletonlabs/skeleton'), '../**/*.{html,js,svelte,ts}')
   ],
   darkMode: 'class',
-  theme: {
-    extend: {},
-  },
-
+  // theme: {
+  //   extend: {},
+  // },
   plugins: [
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),

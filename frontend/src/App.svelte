@@ -1,6 +1,16 @@
 <script module="ts">
   import { LightSwitch } from "@skeletonlabs/skeleton"
   import { onMount } from "svelte"
+  import Login from "./lib/auth/Login.svelte"
+  import Logout from "./lib/auth/Logout.svelte"
+  import {
+    checkCurrentUser,
+    isAuthenticated,
+    isAuthenticating,
+  } from "./stores/auth"
+  onMount(() => {
+    checkCurrentUser()
+  })
 
   let date = new Date()
   const MONTH = {
@@ -27,7 +37,9 @@
     6: "Saturday",
   }
   $: dayOfWeek = `${DAYS[date.getDay()]}`
-  $: dateString = `${MONTH[date.getMonth() + 1]} ${date.getDate()}, ${date.getFullYear()}`
+  $: dateString = `${
+    MONTH[date.getMonth() + 1]
+  } ${date.getDate()}, ${date.getFullYear()}`
 
   $: time = date.toLocaleString("en-US", {
     hour: "numeric",
@@ -44,7 +56,20 @@
 </script>
 
 <main class="bg-gradient-to-bl from-primary-500 to-transparent h-full w-full">
-  <div class="absolute top-5 right-5 flex flex-col justify-center items-end space-y-1">
+  <div class="p-10">
+    {#if $isAuthenticated}
+      <Logout />
+    {/if}
+    {#if $isAuthenticating}
+      Checking
+    {/if}
+    {#if !$isAuthenticated && !$isAuthenticating}
+      <Login />
+    {/if}
+  </div>
+  <div
+    class="absolute top-5 right-5 flex flex-col justify-center items-end space-y-1"
+  >
     <div class="text-4xl font-bold text-white">
       {time}
     </div>
