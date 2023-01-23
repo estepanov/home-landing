@@ -14,8 +14,8 @@ export default function (app: App) {
   });
 
   app
+    .stack(AuthStack)
     .stack(DBStack)
     .stack(ApiStack)
-    .stack(AuthStack)
     .stack(ClientStack);
 }

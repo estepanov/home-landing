@@ -2,6 +2,7 @@ import handler from "../../utils/handler";
 import dynamoDb from "../../utils/dynamodb";
 
 export const main = handler(async (event) => {
+
   const params = {
     TableName: process.env.TABLE_NAME,
     // 'KeyConditionExpression' defines the condition for the query
@@ -11,7 +12,7 @@ export const main = handler(async (event) => {
     // 'ExpressionAttributeValues' defines the value in the condition
     // - ':userId': defines 'userId' to be the id of the author
     ExpressionAttributeValues: {
-      ":userId": event.requestContext?.authorizer?.iam.cognitoIdentity.identityId,
+      ":userId": event.requestContext.authorizer?.jwt.claims.sub,
     },
   };
 

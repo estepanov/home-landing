@@ -8,14 +8,12 @@
   }
 </script>
 
-<div class="space-y-1">
-  <label for={id} class="inline-block text-surface-900-50">
+<label class="inline-block text-surface-900-50 space-y-1">
+  <span>
     {label}
-  </label>
+  </span>
   <input
-    type="text"
-    class="rounded-none"
-    id={id}
-    {...$$restProps}
+  type="text"
+  {...$$restProps}
   />
-</div>
+</label>

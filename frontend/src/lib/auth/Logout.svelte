@@ -2,4 +2,4 @@
     import { logout } from "../../stores/auth"
 </script>
 
-<button type="button" on:click|preventDefault={logout} class="btn btn-filled-primary btn-base">Logout</button>
+<button type="button" on:click|preventDefault={logout} class="py-2 px-2 text-xs rounded-none underline">Logout</button>
