@@ -15,10 +15,14 @@ export const main = handler(async (event) => {
     },
     // 'UpdateExpression' defines the attributes to be updated
     // 'ExpressionAttributeValues' defines the value in the update expression
-    UpdateExpression: "SET name = :name, bookmarks = :bookmarks",
+    UpdateExpression: "SET #name = :name, bookmarks = :bookmarks, updatedAt = :updatedAt",
     ExpressionAttributeValues: {
       ":bookmarks": data.bookmarks || [],
       ":name": data.name,
+      ":updatedAt": new Date().getTime(),
+    },
+    ExpressionAttributeNames: {
+      "#name": "name"
     },
     // 'ReturnValues' specifies if and how to return the item's attributes,
     // where ALL_NEW returns all attributes of the item after the update; you

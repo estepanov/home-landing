@@ -8,6 +8,7 @@
     "deploy": "sst deploy",
     "deploy:prod": "npx sst deploy --stage prod",
     "remove": "sst remove",
+    "remove:prod": "sst remove --stage prod",
     "console": "sst console",
     "typecheck": "tsc --noEmit",
     "test": "sst bind -- vitest run"

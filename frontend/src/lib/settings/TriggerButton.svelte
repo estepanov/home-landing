@@ -21,6 +21,7 @@ function triggerCustomModal(): void {
         meta:{}
 	};
 	modalStore.trigger(d);
+	
 }
 				
 </script>

@@ -2,19 +2,12 @@
   import { writable } from "svelte/store"
   import Input from "../form/Input.svelte"
   import { Stepper, Step, Alert } from "@skeletonlabs/skeleton"
-    import { postLandingZone, isLandingZoneLoading } from "../../stores/landingZones"
+    import { postLandingZone, isLandingZoneLoading, putLandingZone, LandingZone } from "../../stores/landingZones"
   const active = writable(0)
 
   const getId = () => {
     return window.crypto.getRandomValues(new Uint32Array(1))[0].toString(16)
   }
-
-  $: name = ""
-  $: isValidName = name?.trim()?.length >= 1
-
-  $: error = ""
-  $: success = ""
-
   interface Bookmark {
     name: string
     url: string
@@ -28,8 +21,17 @@
       id: getId(),
     }
   }
+  export let onSave: ()=>void = () => {}
+  export let landingZone: LandingZone|null = null
+  export let mode: "create" | "edit" = "create";
 
-  $: bookmarks = [makeBookmark()]
+  let name = landingZone?.name || ""
+  $: isValidName = name?.trim()?.length >= 1
+
+  $: error = ""
+  $: success = ""
+
+  $: bookmarks = landingZone?.bookmarks || [makeBookmark()]
 
   const addBookmark = () => {
     bookmarks = [...bookmarks, makeBookmark()]
@@ -41,13 +43,18 @@
 
   const onComplete: any = () => {
     const newItem = {
+      homePageId: mode === "edit" ? landingZone.homePageId : undefined,
       name,
       bookmarks,
     }
     console.log(newItem)
     if(!$isLandingZoneLoading) {
-      postLandingZone(newItem)
+      const actionPromise = mode === "create" ? postLandingZone : putLandingZone
+      actionPromise(newItem)
         .then((record) => {
+          if(mode === "edit") {
+            onSave()
+          } 
           active.set(0)
           console.log('record',record)
           success = `Landing Zone (${newItem.name}) created successfully`

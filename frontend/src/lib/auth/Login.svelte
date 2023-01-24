@@ -53,14 +53,15 @@
       required
       disabled={$isAuthenticating}
     />
+    <button
+      type="submit"
+      class="btn btn-filled-primary text-sm uppercase px-8 {$isAuthenticating ? 'opacity-50' : ''}}"
+      disabled={$isAuthenticating}>sign in</button
+    >
     {#if $isAuthenticating}
+    <div transition:fade>
       <ProgressBar label="Checking credentials..." rounded="rounded-full" meter="bg-primary-500" track="bg-primary-500/30" height="h-4"  />
-    {:else}
-      <button
-        type="submit"
-        class="btn btn-filled-primary btn-base text-sm uppercase mt-4 px-8"
-        disabled={$isAuthenticating}>sign in</button
-      >
+    </div>
     {/if}
   </form>
 </div>

@@ -12,7 +12,7 @@ export interface LandingZone {
     homePageId: string;
     name: string;
     bookmarks: Bookmark[];
-    createdAt: number;
+    createdAt?: number;
 }
 
 export type NewLandingZone = Omit<LandingZone, 'homePageId'>
@@ -96,10 +96,21 @@ export const deleteLandingZone = async (id: string) => {
         })
 };
 
-const putLandingZone = async (landingZone: LandingZone) => {
-    return API.put("lzs", `landingzones/${landingZone.id}`, {
+export const putLandingZone = async (landingZone: LandingZone) => {
+    landingZoneError.set(null)
+    landingZonereqState.set(LZRequestStatus.LOADING)
+    return API.put("lzs", `landingzones/${landingZone.homePageId}`, {
         body: landingZone,
-    });
+    }).then((data) => {
+        console.log('putLandingZone', data)
+        landingZonereqState.set(LZRequestStatus.COMPLETE)
+        return data
+    })
+    .catch((err) => {
+        console.log('err putLandingZone', err)
+        landingZonereqState.set(LZRequestStatus.FAIL)
+        landingZoneError.set(err?.message)
+    })
 };
 
 const getLandingZones = async () => {
@@ -113,7 +124,7 @@ const getLandingZone = async (id: string) => {
 export async function getAndSetAllLandingZones() {
     landingZoneError.set(null)
     landingZonereqState.set(LZRequestStatus.LOADING)
-    console.log('fetching','allLandingZones')
+    console.log('fetching', 'allLandingZones')
     return getLandingZones()
         .then((data) => {
             console.log('allLandingZones', data)
