@@ -4,7 +4,7 @@ import { DBStack } from "./DBStack";
 import { isProdStage } from "./utils";
 
 export function ApiStack({ stack, app }: StackContext) {
-  const { table } = use(DBStack);
+  const { table, primaryLZTable } = use(DBStack);
   const { auth } = use(AuthStack);
   const isProd = isProdStage(app);
 
@@ -24,6 +24,7 @@ export function ApiStack({ stack, app }: StackContext) {
       function: {
         environment: {
           TABLE_NAME: table.tableName,
+          PRIMARY_LZ_TABLE_NAME: primaryLZTable.tableName,
         },
       },
     },
@@ -33,6 +34,8 @@ export function ApiStack({ stack, app }: StackContext) {
       "PUT /landingzones/{id}": "functions/landingzones/update.main",
       "DELETE /landingzones/{id}": "functions/landingzones/delete.main",
       "POST /landingzones": "functions/landingzones/create.main",
+      "GET /landingzones/primary": "functions/landingzones/primary/get.main",
+      "POST /landingzones/primary": "functions/landingzones/primary/set.main",
     },
     customDomain: {
       domainName: isProd ? `api.home.${process.env.ROOT_HOSTED_ZONE}` : `${app.stage}.api.home.${process.env.ROOT_HOSTED_ZONE}`,
@@ -41,7 +44,7 @@ export function ApiStack({ stack, app }: StackContext) {
     }
   });
 
-  api.bind([table])
+  api.bind([table, primaryLZTable])
 
   auth.attachPermissionsForAuthUsers(stack, [
     api,

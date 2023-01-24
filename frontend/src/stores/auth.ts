@@ -72,6 +72,7 @@ export async function checkCurrentUser() {
           .then((data) => {
             authReqState.set(AuthRequestStatus.COMPLETE)
             userStore.set(data)
+            return data
           })
           .catch((err)=>{ 
             authReqState.set(AuthRequestStatus.FAIL)

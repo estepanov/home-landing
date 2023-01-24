@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { InputProps } from "./types"
+  // import type { InputProps } from "./types"
   export let label: string = ""
-  export let id: string = ""
-  interface $$Props extends InputProps {
-    label: string
-    id: string
+  export let value: string
+
+  const handleInput = (e) => {
+    value = e.target.value
   }
 </script>
 
@@ -12,8 +12,5 @@
   <span>
     {label}
   </span>
-  <input
-  type="text"
-  {...$$restProps}
-  />
+  <input type="text" on:input={handleInput} bind:value {...$$restProps} />
 </label>

@@ -1,10 +1,19 @@
 <script lang="ts">
-  // import { writable } from "svelte/store"
-  // import Input from "../form/Input.svelte"
+  import { writable } from "svelte/store"
+  import Input from "../form/Input.svelte"
+  import { Stepper, Step, Alert } from "@skeletonlabs/skeleton"
+    import { postLandingZone, isLandingZoneLoading } from "../../stores/landingZones"
+  const active = writable(0)
 
   const getId = () => {
     return window.crypto.getRandomValues(new Uint32Array(1))[0].toString(16)
   }
+
+  $: name = ""
+  $: isValidName = name?.trim()?.length >= 1
+
+  $: error = ""
+  $: success = ""
 
   interface Bookmark {
     name: string
@@ -20,91 +29,101 @@
     }
   }
 
-  // const { form, errors, state, handleChange, handleSubmit, handleReset, isValid } =
-  //   createForm({
-  //     initialValues: {
-  //       name: "",
-  //       bookmarks: [makeBookmark()],
-  //     },
-  //     validationSchema: yup.object().shape({
-  //       bookmarks: yup.array().of(
-  //         yup.object().shape({
-  //           id: yup.string().required(),
-  //           name: yup.string().required(),
-  //           url: yup.string().required(),
-  //         })
-  //       ),
-  //     }),
-  //     onSubmit: (values) => {
-  //       alert(JSON.stringify(values))
-  //     },
-  //   })
+  $: bookmarks = [makeBookmark()]
 
-  const add = () => {
-    // const newBookmark = makeBookmark()
-    // $form.bookmarks = $form.bookmarks.concat(newBookmark)
+  const addBookmark = () => {
+    bookmarks = [...bookmarks, makeBookmark()]
   }
 
-  const remove = (idToRemove: string) => () => {
-    // $form.bookmarks = $form.bookmarks.filter(({ id }) => id !== idToRemove)
+  const removeBookmark = (id: string) => () => {
+    bookmarks = bookmarks.filter((b) => b.id !== id)
+  }
+
+  const onComplete: any = () => {
+    const newItem = {
+      name,
+      bookmarks,
+    }
+    console.log(newItem)
+    if(!$isLandingZoneLoading) {
+      postLandingZone(newItem)
+        .then((record) => {
+          active.set(0)
+          console.log('record',record)
+          success = `Landing Zone (${newItem.name}) created successfully`
+          name = ""
+          bookmarks = [makeBookmark()]
+        })
+        .catch((err) => {
+          console.log(err)
+          error = err.message
+        })
+
+    }
   }
 </script>
-<p>not ready yet</p>
-<!-- <form>
-  <h2>General</h2>
-  <Input
-    label="Name"
-    name="name"
-    on:change={handleChange}
-    on:blur={handleChange}
-    bind:value={$form.name}
-  />
-  {#if $errors.name}
-    <small class="error">{$errors.name}</small>
-  {/if}
-  <h2>Bookmarks</h2>
-<div class="bg-primary-100-900-token space-y-2">
-    {#each $form.bookmarks as bookmark, bmIndex (bookmark.id)}
+{#if error.length > 0}
+  <Alert type="error" on:dismiss={() => (error = "")}>
+    {error}
+  </Alert>
+{/if}
+{#if success.length > 0}
+  <Alert type="success" on:dismiss={() => (success = "")}>
+    {success}
+  </Alert>
+{/if}
+
+<Stepper {active} length={2} on:complete={onComplete}>
+  <Step index={0} locked={!isValidName}>
+    <svelte:fragment slot="header">Name</svelte:fragment>
+    <Input
+      label="What do you want to call this landing page?"
+      name="name"
+      required
+      bind:value={name}
+    />
+  </Step>
+  <Step index={1} locked={$isLandingZoneLoading}>
+    <svelte:fragment slot="header">Bookmarks</svelte:fragment>
+    {#each bookmarks as bookmark, bmIndex (bookmark.id)}
       <div class="form-group grid grid-cols-5 gap-4">
         <div class="col-span-2">
           <Input
+            required
             label="Name"
             name={`bookmarks[${bmIndex}].name`}
-            on:change={handleChange}
-            on:blur={handleChange}
-            bind:value={$form.bookmarks[bmIndex].name}
+            bind:value={bookmarks[bmIndex].name}
           />
-          {#if $errors.bookmarks[bmIndex]?.name}
-            <small class="error">{$errors.bookmarks[bmIndex].name}</small>
-          {/if}
+          <!-- {#if $errors.bookmarks[bmIndex]?.name}
+          <small class="error">{$errors.bookmarks[bmIndex].name}</small>
+        {/if} -->
         </div>
         <div class="col-span-2">
           <Input
+            required
             label="URL"
             name={`bookmarks[${bmIndex}].url`}
-            on:change={handleChange}
-            on:blur={handleChange}
-            bind:value={$form.bookmarks[bmIndex].url}
+            bind:value={bookmarks[bmIndex].url}
           />
-          {#if $errors.bookmarks[bmIndex]?.url}
-            <small class="error">{$errors.bookmarks[bmIndex].url}</small>
-          {/if}
+          <!-- {#if $errors.bookmarks[bmIndex]?.url}
+          <small class="error">{$errors.bookmarks[bmIndex].url}</small>
+        {/if} -->
         </div>
         <div class="col-span-1 flex flex-col items-start justify-end">
-          {#if $form.bookmarks.length !== 1}
-          <button type="button" class="btn btn-filled-tertiary btn-sm h-full" on:click={remove(bookmark.id)}>Remove</button>
-          {/if}
+          <button
+            type="button"
+            class="btn btn-outline-red btn-sm h-full rounded-none"
+            on:click|preventDefault={removeBookmark(bookmark.id)}>Remove</button
+          >
         </div>
       </div>
-  
-      {#if bmIndex === $form.bookmarks.length - 1}
-        <button type="button" class="btn btn-filled-secondary btn-sm" on:click={add}>+ Add Bookmark</button>
-      {/if}
     {/each}
-</div>
->
-  <div class="button-group space-x-4 mt-4">
-    <button type="button" class="btn btn-filled-primary" disabled={!$isValid} on:click={handleSubmit}>submit</button>
-    <button type="button" class="btn btn-outline-primary" on:click={handleReset}>reset</button>
-  </div>
-</form> -->
+    {#if bookmarks.length < 10}
+      <button
+        type="button"
+        class="btn btn-filled-secondary btn-sm"
+        on:click|preventDefault={addBookmark}>+ Add Bookmark</button
+      >
+    {/if}
+  </Step>
+</Stepper>

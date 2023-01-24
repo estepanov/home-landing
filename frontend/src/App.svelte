@@ -1,4 +1,5 @@
 <script module="ts">
+  import { fade } from "svelte/transition"
   import { LightSwitch, Modal } from "@skeletonlabs/skeleton"
   import { onMount } from "svelte"
   import Login from "./lib/auth/Login.svelte"
@@ -10,8 +11,17 @@
     isAuthenticated
   } from "./stores/auth"
     import TriggerButton from "./lib/settings/TriggerButton.svelte"
+    import { getPrimaryLandingZone, primaryLandingZone } from "./stores/landingZones"
   onMount(() => {
+
     checkCurrentUser()
+      .then(async (data) => {
+        console.log('data',data)
+        if(data) {
+          const res = await getPrimaryLandingZone()
+          console.log('res',res)
+        }
+      })
   })
 
   let date = new Date()
@@ -28,6 +38,10 @@
   <div class="p-5 pt-36">
     {#if !$isAuthenticated}
       <Login />
+      {:else}
+      {#if $primaryLandingZone}
+        <h1 class="text-primary" transition:fade|local={{ duration: 200 }}>{$primaryLandingZone.name}</h1>
+      {/if} 
     {/if}
   </div>
   <div

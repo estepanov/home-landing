@@ -1,17 +1,25 @@
 <script lang="ts">
+  import {fade} from "svelte/transition"
   import { ProgressBar } from "@skeletonlabs/skeleton"
   import { login, authError, isAuthenticating } from "../../stores/auth"
   import Input from "../form/Input.svelte"
 
+  $: username = ""
+  $: password = ""
+
   function onSubmit(e) {
     if ($isAuthenticating) return
     $authError = null
-    const formData = new FormData(e.target)
-    const username = formData.get("username")
-    const password = formData.get("password")
+    // const formData = new FormData(e.target)
+    // const username = formData.get("username")
+    // const password = formData.get("password")
+    // login(
+    //   formData.get("username") as string,
+    //   formData.get("password") as string
+    // )
     login(
-      formData.get("username") as string,
-      formData.get("password") as string
+      username,
+      password
     )
   }
 </script>
@@ -28,6 +36,7 @@
     {/if}
     <Input
       label="Username"
+      bind:value={username}
       id="username"
       name="username"
       autocomplete="username"
@@ -39,17 +48,19 @@
       id="password"
       name="password"
       type="password"
+      bind:value={password}
       autocomplete="current-password"
       required
       disabled={$isAuthenticating}
     />
+    {#if $isAuthenticating}
+      <ProgressBar label="Checking credentials..." rounded="rounded-full" meter="bg-primary-500" track="bg-primary-500/30" height="h-4"  />
+    {:else}
+      <button
+        type="submit"
+        class="btn btn-filled-primary btn-base text-sm uppercase mt-4 px-8"
+        disabled={$isAuthenticating}>sign in</button
+      >
+    {/if}
   </form>
-  <button
-    type="submit"
-    class="btn btn-filled-primary btn-base text-sm uppercase mt-4 px-8"
-    disabled={$isAuthenticating}>sign in</button
-  >
-  {#if $isAuthenticating}
-    <ProgressBar label="Checking credentials..." rounded="rounded-full" meter="bg-primary-500" track="bg-primary-500/30" height="h4"  />
-  {/if}
 </div>

@@ -11,8 +11,10 @@ export const main = handler(async (event) => {
             // The attributes of the item to be created
             userId: event.requestContext.authorizer?.jwt.claims.sub, // The id of the author
             homePageId: uuid.v1(), // A unique uuid
-            content: data.content, // Parsed from request body
-            attachment: data.attachment, // Parsed from request body
+            name: data.name, // Parsed from request body
+            bookmarks: data.bookmarks, // Parsed from request body
+            // content: data.content, // Parsed from request body
+            // attachment: data.attachment, // Parsed from request body
             createdAt: Date.now(), // Current Unix timestamp
         },
     };
