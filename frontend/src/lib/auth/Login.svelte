@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {slide} from "svelte/transition"
+  import {slide, fade} from "svelte/transition"
   import { ProgressBar } from "@skeletonlabs/skeleton"
   import { login, authError, isAuthenticating } from "../../stores/auth"
   import Input from "../form/Input.svelte"
@@ -20,7 +20,7 @@
 <div class=" max-w-md w-ful">
   <form on:submit|preventDefault={onSubmit} class="space-y-2 p-4 bg-white/30 dark:bg-black/30 backdrop-blur-sm rounded-2xl">
     {#if $authError}
-      <div class="alert alert-error" transition:fade|local={{ duration: 200 }}>
+      <div class="alert variant-ghost-error" transition:fade|local={{ duration: 200 }}>
         <div class="alert-message">
           <h2>Woops...</h2>
           <p class="text-xs">{$authError}</p>
@@ -46,12 +46,14 @@
       required
       disabled={$isAuthenticating}
     />
-    <button
-      type="submit"
-      class="btn btn-filled-secondary text-sm uppercase px-8"
-      class:opacity-50={$isAuthenticating}
-      disabled={$isAuthenticating}>sign in</button
-    >
+    <div class="flex flex-row justify-end pt-2">
+      <button
+        type="submit"
+        class="btn btn-sm variant-filled-primary uppercase px-8 block align-end"
+        class:opacity-50={$isAuthenticating}
+        disabled={$isAuthenticating}>sign in</button
+      >
+    </div>
     {#if $isAuthenticating}
     <div transition:slide>
       <ProgressBar label="Checking credentials..." rounded="rounded-full" meter="bg-primary-500" track="bg-primary-500/30" height="h-4"  />

@@ -12,7 +12,7 @@ const config = {
     require('@tailwindcss/typography'),
     require('@tailwindcss/line-clamp'),
     // Keep any existing plugins present and append the following:
-		require('@skeletonlabs/skeleton/tailwind/skeleton.cjs')
+		...require('@skeletonlabs/skeleton/tailwind/skeleton.cjs')()
   ],
 };
 

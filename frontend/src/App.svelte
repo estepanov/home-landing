@@ -1,8 +1,8 @@
 <script module="ts">
   import "./theme.postcss"
+  // import '@skeletonlabs/skeleton/themes/theme-gold-nouveau.css';
   import "@skeletonlabs/skeleton/themes/theme-skeleton.css"
   import "@skeletonlabs/skeleton/styles/all.css"
-  import "./app.postcss"
   import { LightSwitch, Modal } from "@skeletonlabs/skeleton"
   import { onMount } from "svelte"
   import Login from "./lib/auth/Login.svelte"

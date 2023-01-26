@@ -13,6 +13,6 @@
   $: dayOfWeek = DAYS[date.getDay()]
 </script>
 
-<div class="text-token text-sm">
+<div class="text-on-primary-token text-sm">
   {dayOfWeek}
 </div>

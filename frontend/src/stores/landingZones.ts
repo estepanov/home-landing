@@ -78,9 +78,8 @@ export const postLandingZone = async (landingZone: NewLandingZone) => {
             return data
         })
         .catch((err) => {
-            console.log('err postLandingZone', err)
             landingZonereqState.set(LZRequestStatus.FAIL)
-            landingZoneError.set(err?.message)
+            landingZoneError.set(err?.response?.data?.error || err?.message)
             throw err
         })
 };
@@ -97,7 +96,7 @@ export const deleteLandingZone = async (id: string) => {
         .catch((err) => {
             console.log('err deleteLandingZone', err)
             landingZonereqState.set(LZRequestStatus.FAIL)
-            landingZoneError.set(err?.message)
+            landingZoneError.set(err?.response?.data?.error || err?.message)
         })
 };
 
@@ -112,9 +111,8 @@ export const putLandingZone = async (landingZone: LandingZone) => {
         return data
     })
     .catch((err) => {
-        console.log('err putLandingZone', err)
         landingZonereqState.set(LZRequestStatus.FAIL)
-        landingZoneError.set(err?.message)
+        landingZoneError.set(err?.response?.data?.error || err?.message)
     })
 };
 

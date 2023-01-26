@@ -33,6 +33,9 @@
 }
 </script>
 
-<button class="btn btn-filled-secondary btn-sm" on:click|preventDefault={triggerCustomModal}>
+<button
+	class="btn variant-ghost-primary btn-sm transition-all"
+	on:click|preventDefault={triggerCustomModal}
+>
     <slot />
 </button>

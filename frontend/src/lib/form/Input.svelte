@@ -8,7 +8,7 @@
   }
 </script>
 
-<label class="inline-block text-surface-900-50 space-y-1">
+<label class="inline-block text-surface-900-50 space-y-1 w-full">
   <span>
     {label}
   </span>
