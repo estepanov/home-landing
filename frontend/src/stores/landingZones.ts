@@ -61,6 +61,11 @@ export const makePrimaryLandingZone = async (landingZoneId: string) => {
     })
 }
 
+export const setPrimaryLandingZone = async (landingZone: LandingZone) => {
+    primaryLandingZone.set(landingZone);
+    return makePrimaryLandingZone(landingZone.homePageId);
+}
+
 export const postLandingZone = async (landingZone: NewLandingZone) => {
     landingZoneError.set(null)
     landingZonereqState.set(LZRequestStatus.LOADING)

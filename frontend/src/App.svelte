@@ -3,7 +3,6 @@
   import "@skeletonlabs/skeleton/themes/theme-skeleton.css"
   import "@skeletonlabs/skeleton/styles/all.css"
   import "./app.postcss"
-  import { fade } from "svelte/transition"
   import { LightSwitch, Modal } from "@skeletonlabs/skeleton"
   import { onMount } from "svelte"
   import Login from "./lib/auth/Login.svelte"
@@ -16,6 +15,7 @@
     getPrimaryLandingZone,
     primaryLandingZone,
   } from "./stores/landingZones"
+    import Bookmarks from "./lib/widgets/Bookmarks.svelte"
   onMount(() => {
     checkCurrentUser().then(async (data) => {
       console.log("data", data)
@@ -34,6 +34,14 @@
     }, 1000)
     return () => clearInterval(interval)
   })
+
+  onMount(() => {
+    const isDarkModeSet = localStorage.getItem("storeLightSwitch") === "true"
+    const hasDarkModeClass = document.documentElement.classList.contains("dark")
+    if(isDarkModeSet && !hasDarkModeClass) {
+      document.documentElement.classList.add("dark")
+    }
+  })
 </script>
 
 <main class="bg-gradient-to-bl from-primary-500 to-transparent h-full w-full">
@@ -41,15 +49,8 @@
     {#if !$isAuthenticated}
       <Login />
     {:else if $primaryLandingZone}
-      <h1 class="text-primary" transition:fade|local={{ duration: 200 }}>
-        {$primaryLandingZone.name}
-      </h1>
       <div>
-        <ul>
-          {#each $primaryLandingZone.bookmarks as bookmark (bookmark.id)}
-            <li><a href={bookmark.url}>{bookmark.name}</a></li>
-          {/each}
-        </ul>
+        <Bookmarks bookmarks={$primaryLandingZone.bookmarks} />
       </div>
     {/if}
   </div>

@@ -33,6 +33,6 @@
 }
 </script>
 
-<button class="btn btn-filled-secondary btn-sm rounded-none" on:click|preventDefault={triggerCustomModal}>
-    edit
+<button class="btn btn-filled-secondary btn-sm" on:click|preventDefault={triggerCustomModal}>
+    <slot />
 </button>

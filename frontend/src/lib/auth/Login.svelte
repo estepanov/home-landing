@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {fade} from "svelte/transition"
+  import {slide} from "svelte/transition"
   import { ProgressBar } from "@skeletonlabs/skeleton"
   import { login, authError, isAuthenticating } from "../../stores/auth"
   import Input from "../form/Input.svelte"
@@ -7,16 +7,9 @@
   $: username = ""
   $: password = ""
 
-  function onSubmit(e) {
+  function onSubmit() {
     if ($isAuthenticating) return
     $authError = null
-    // const formData = new FormData(e.target)
-    // const username = formData.get("username")
-    // const password = formData.get("password")
-    // login(
-    //   formData.get("username") as string,
-    //   formData.get("password") as string
-    // )
     login(
       username,
       password
@@ -55,11 +48,12 @@
     />
     <button
       type="submit"
-      class="btn btn-filled-primary text-sm uppercase px-8 {$isAuthenticating ? 'opacity-50' : ''}}"
+      class="btn btn-filled-secondary text-sm uppercase px-8"
+      class:opacity-50={$isAuthenticating}
       disabled={$isAuthenticating}>sign in</button
     >
     {#if $isAuthenticating}
-    <div transition:fade>
+    <div transition:slide>
       <ProgressBar label="Checking credentials..." rounded="rounded-full" meter="bg-primary-500" track="bg-primary-500/30" height="h-4"  />
     </div>
     {/if}
