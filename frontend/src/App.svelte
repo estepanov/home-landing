@@ -1,9 +1,9 @@
 <script module="ts">
   import "./theme.postcss"
-  // import '@skeletonlabs/skeleton/themes/theme-gold-nouveau.css';
-  import "@skeletonlabs/skeleton/themes/theme-skeleton.css"
+  import '@skeletonlabs/skeleton/themes/theme-gold-nouveau.css';
+  // import "@skeletonlabs/skeleton/themes/theme-skeleton.css"
   import "@skeletonlabs/skeleton/styles/all.css"
-  import { LightSwitch, Modal } from "@skeletonlabs/skeleton"
+  import { LightSwitch, Modal, ProgressRadial } from "@skeletonlabs/skeleton"
   import { onMount } from "svelte"
   import Login from "./lib/auth/Login.svelte"
   import DateString from "./lib/widgets/DateString.svelte"
@@ -14,8 +14,11 @@
   import {
     getPrimaryLandingZone,
     primaryLandingZone,
+    isPrimaryLandingZoneLoading
   } from "./stores/landingZones"
     import Bookmarks from "./lib/widgets/Bookmarks.svelte"
+    import EditTriggerModal from "./lib/landingzone/EditTriggerModal.svelte"
+    import { fade } from "svelte/transition"
   onMount(() => {
     checkCurrentUser().then(async (data) => {
       console.log("data", data)
@@ -44,7 +47,12 @@
   })
 </script>
 
-<main class="bg-gradient-to-bl from-primary-500 to-transparent h-full w-full">
+<main 
+  class="bg-gradient-to-bl from-primary-500 to-transparent h-full w-full"
+  class:from-primary-500={!$primaryLandingZone || !$primaryLandingZone.background}
+  class:from-secondary-500={$primaryLandingZone?.background === "secondary"}
+
+>
   <div class="p-5 pt-36">
     {#if !$isAuthenticated}
       <Login />
@@ -66,6 +74,17 @@
     class="absolute bottom-5 right-5 flex flex-row space-x-4 justify-center items-center"
   >
     {#if $isAuthenticated}
+      {#if $isPrimaryLandingZoneLoading}
+        <div transition:fade>
+          <ProgressRadial stroke={200} meter="stroke-primary-600 dark:stroke-primary-400" track="stroke-white dark:stroke-black" class="w-6 h-6 mx-1"  />
+        </div>
+      {/if} 
+      {#if $primaryLandingZone}
+        <div class="text-sm font-bold text-token">
+          {$primaryLandingZone.name}
+        </div>
+        <EditTriggerModal landingZone={$primaryLandingZone} />
+      {/if}
       <TriggerButton />
     {/if}
     <LightSwitch />

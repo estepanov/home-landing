@@ -33,11 +33,19 @@ export const landingZoneError = writable<null | string>(null);
 
 export const allLandingZones = writable<LandingZone[]>([]);
 
+export const primaryLandingZonereqState = writable<LZRequestStatus>(LZRequestStatus.INIT);
+
+export const isPrimaryLandingZoneLoading = derived(primaryLandingZonereqState, ($primaryLandingZonereqState) => {
+    return $primaryLandingZonereqState === LZRequestStatus.LOADING;
+});
+
 export const primaryLandingZone = writable<LandingZone | null>(null);
 
 export const getPrimaryLandingZone = async () => {
+    primaryLandingZonereqState.set(LZRequestStatus.LOADING)
     return API.get("lzs", "landingzones/primary", {})
         .then((data) => {
+            primaryLandingZonereqState.set(LZRequestStatus.COMPLETE)
             primaryLandingZone.set(data);
             return data;
         })
