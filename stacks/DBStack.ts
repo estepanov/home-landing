@@ -20,12 +20,6 @@ export function DBStack({ stack }: StackContext) {
     primaryIndex: { partitionKey: "userId" },
   });
 
-  //cache weather data
-  // const weatherTable = new Table(stack, "WeatherTable", {
-  //   fields: {
-  //     userId: "string",
-    
-
   return {
     table,
     primaryLZTable

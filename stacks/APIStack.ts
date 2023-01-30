@@ -44,7 +44,11 @@ export function ApiStack({ stack, app }: StackContext) {
     }
   });
 
-  api.bind([table, primaryLZTable])
+  api.bind([
+    table, 
+    primaryLZTable
+  ])
+
 
   auth.attachPermissionsForAuthUsers(stack, [
     api,

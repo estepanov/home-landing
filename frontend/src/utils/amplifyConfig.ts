@@ -1,4 +1,4 @@
-import {Auth} from "@aws-amplify/auth"
+import { Auth } from "@aws-amplify/auth"
 
 export const AMPLIFY_CONFIG = {
     Auth: {
@@ -57,8 +57,15 @@ export const AMPLIFY_CONFIG = {
                 region: import.meta.env.VITE_COGNITO_REGION,
                 custom_header: async () => {
                     return { Authorization: `Bearer ${(await Auth.currentSession()).getAccessToken().getJwtToken()}` }
-                    // return { Authorization: `Bearer ${(await Auth.currentSession()).getIdToken().getJwtToken()}` }
-                  }
+                }
+            },
+            {
+                name: "news",
+                endpoint: import.meta.env.VITE_APP_NEWS_API_URL,
+                region: import.meta.env.VITE_COGNITO_REGION,
+                custom_header: async () => {
+                    return { Authorization: `Bearer ${(await Auth.currentSession()).getAccessToken().getJwtToken()}` }
+                }
             },
         ]
     }

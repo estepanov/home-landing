@@ -1,11 +1,13 @@
 import { StackContext, Api, StaticSite, Cognito, use } from "@serverless-stack/resources";
 import { ApiStack } from "./APIStack";
 import { AuthStack } from "./AuthStack";
+import { NewsStack } from "./NewsStack";
 import { isProdStage } from "./utils";
 
 export function ClientStack({ stack, app }: StackContext) {
     const isProd = isProdStage(app);
     const { api } = use(ApiStack);
+    const { newsApi } = use(NewsStack)
     const { auth } = use(AuthStack);
 
     const site = new StaticSite(stack, "MainSite", {
@@ -23,6 +25,7 @@ export function ClientStack({ stack, app }: StackContext) {
                 VITE_COGNITO_OATH_LOGOUT_REDIRECT: process.env.VITE_COGNITO_OATH_LOGOUT_REDIRECT,
                 VITE_COGNITO_OATH_DOMAIN: isProd ? `auth.${process.env.ROOT_HOSTED_ZONE}` : `dev-auth.${process.env.ROOT_HOSTED_ZONE}`,
                 VITE_APP_API_URL: api.customDomainUrl || api.url,
+                VITE_APP_NEWS_API_URL: newsApi.customDomainUrl || newsApi.url,
                 VITE_APP_USER_POOL_ID: auth.userPoolId,
                 VITE_APP_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId as string,
                 VITE_APP_USER_POOL_CLIENT_ID: auth.userPoolClientId,

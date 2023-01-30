@@ -19,6 +19,7 @@
     import Bookmarks from "./lib/widgets/Bookmarks.svelte"
     import EditTriggerModal from "./lib/landingzone/EditTriggerModal.svelte"
     import { fade } from "svelte/transition"
+    import WorldNews from "./lib/widgets/WorldNews.svelte"
   onMount(() => {
     checkCurrentUser().then(async (data) => {
       console.log("data", data)
@@ -45,6 +46,7 @@
       document.documentElement.classList.add("dark")
     }
   })
+
 </script>
 
 <main 
@@ -59,6 +61,9 @@
     {:else if $primaryLandingZone}
       <div>
         <Bookmarks bookmarks={$primaryLandingZone.bookmarks} />
+      </div>
+      <div>
+        <WorldNews />
       </div>
     {/if}
   </div>

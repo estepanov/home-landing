@@ -1,0 +1,67 @@
+import { derived, writable } from 'svelte/store';
+import { API } from "@aws-amplify/api";
+
+export enum NewsRequestStatus {
+    INIT,
+    LOADING,
+    FAIL,
+    COMPLETE,
+}
+
+export interface News {
+    humanName: string;
+    sourceName: string;
+    sourceCategory: string;
+    lastCheckedDate?: number;
+    items: NewsItem[];
+}
+
+export interface Provider {
+    _type: string;
+    name: string;
+    image: {
+        thumbnail: {
+            contentUrl: string;
+        }
+    }
+}
+
+export interface NewsItem {
+    name: string;
+    datePublished: string;
+    image: {
+        thumbnail: {
+            width: number;
+            contentUrl: string;
+            height: number;
+        }
+        isLicensed: boolean;
+    },
+    description: string;
+    provider: Provider[];
+    url: string;
+}
+
+export const newsReqState = writable<NewsRequestStatus>(NewsRequestStatus.INIT);
+
+export const isNewsLoading = derived(newsReqState, ($newsReqState) => {
+    return $newsReqState === NewsRequestStatus.LOADING;
+});
+
+export const newsError = writable<null | string>(null);
+
+export const worldNews = writable<null | News>(null);
+
+export const getWorldNews = async () => {
+    newsReqState.set(NewsRequestStatus.LOADING)
+    return API.get("news", "news/world", {})
+        .then((data) => {
+            newsReqState.set(NewsRequestStatus.COMPLETE)
+            worldNews.set(data);
+            return data;
+        })
+        .catch((err) => {
+            newsReqState.set(NewsRequestStatus.FAIL)
+            newsError.set(err.message);
+        })
+};
