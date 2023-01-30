@@ -9,6 +9,6 @@
   })
 </script>
 
-<div class="text-4xl text-on-primary-token font-extrabold">
+<div class="text-4xl font-extrabold">
 {time}
 </div>

@@ -19,6 +19,6 @@
 
 </script>
 
-<div class="text-on-primary-token text-md font-bold">
+<div class="text-sm leading-none font-bold">
     {dateString}
 </div>

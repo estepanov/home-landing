@@ -1,9 +1,14 @@
 <script module="ts">
   import "./theme.postcss"
-  import '@skeletonlabs/skeleton/themes/theme-gold-nouveau.css';
+  import "@skeletonlabs/skeleton/themes/theme-gold-nouveau.css"
   // import "@skeletonlabs/skeleton/themes/theme-skeleton.css"
   import "@skeletonlabs/skeleton/styles/all.css"
-  import { LightSwitch, Modal, ProgressRadial } from "@skeletonlabs/skeleton"
+  import {
+    LightSwitch,
+    Modal,
+    ProgressRadial,
+    AppShell,
+  } from "@skeletonlabs/skeleton"
   import { onMount } from "svelte"
   import Login from "./lib/auth/Login.svelte"
   import DateString from "./lib/widgets/DateString.svelte"
@@ -14,12 +19,12 @@
   import {
     getPrimaryLandingZone,
     primaryLandingZone,
-    isPrimaryLandingZoneLoading
+    isPrimaryLandingZoneLoading,
   } from "./stores/landingZones"
-    import Bookmarks from "./lib/widgets/Bookmarks.svelte"
-    import EditTriggerModal from "./lib/landingzone/EditTriggerModal.svelte"
-    import { fade } from "svelte/transition"
-    import WorldNews from "./lib/widgets/WorldNews.svelte"
+  import Bookmarks from "./lib/widgets/Bookmarks.svelte"
+  import EditTriggerModal from "./lib/landingzone/EditTriggerModal.svelte"
+  import { fade } from "svelte/transition"
+  import WorldNews from "./lib/widgets/WorldNews.svelte"
   onMount(() => {
     checkCurrentUser().then(async (data) => {
       console.log("data", data)
@@ -42,58 +47,61 @@
   onMount(() => {
     const isDarkModeSet = localStorage.getItem("storeLightSwitch") === "true"
     const hasDarkModeClass = document.documentElement.classList.contains("dark")
-    if(isDarkModeSet && !hasDarkModeClass) {
+    if (isDarkModeSet && !hasDarkModeClass) {
       document.documentElement.classList.add("dark")
     }
   })
-
 </script>
 
-<main 
-  class="bg-gradient-to-bl from-primary-500 to-transparent h-full w-full"
-  class:from-primary-500={!$primaryLandingZone || !$primaryLandingZone.background}
-  class:from-secondary-500={$primaryLandingZone?.background === "secondary"}
-
->
-  <div class="p-5 pt-36">
-    {#if !$isAuthenticated}
-      <Login />
-    {:else if $primaryLandingZone}
-      <div>
-        <Bookmarks bookmarks={$primaryLandingZone.bookmarks} />
+<AppShell>
+  <svelte:fragment slot="pageHeader">
+    <div class="flex flex-row justify-end space-x-4 items-center p-4">
+      <div class="flex flex-col items-end space-y-1">
+        <DateString {date} />
+        <DatOfWeek {date} />
       </div>
-      <div>
-        <WorldNews />
-      </div>
-    {/if}
-  </div>
-  <div
-    class="absolute top-5 right-5 flex flex-col justify-center items-end space-y-1"
-  >
-    <Time {date} />
-    <DateString {date} />
-    <DatOfWeek {date} />
-  </div>
+      <Time {date} />
+    </div>
+  </svelte:fragment>
 
-  <div
-    class="absolute bottom-5 right-5 flex flex-row space-x-4 justify-center items-center"
-  >
-    {#if $isAuthenticated}
-      {#if $isPrimaryLandingZoneLoading}
-        <div transition:fade>
-          <ProgressRadial stroke={200} meter="stroke-primary-600 dark:stroke-primary-400" track="stroke-white dark:stroke-black" class="w-6 h-6 mx-1"  />
+  <main>
+    <div class="p-4">
+      {#if !$isAuthenticated}
+        <Login />
+      {:else if $primaryLandingZone}
+        <div>
+          <Bookmarks bookmarks={$primaryLandingZone.bookmarks} />
         </div>
-      {/if} 
-      {#if $primaryLandingZone}
-        <div class="text-sm font-bold text-token">
-          {$primaryLandingZone.name}
+        <div>
+          <WorldNews />
         </div>
-        <EditTriggerModal landingZone={$primaryLandingZone} />
       {/if}
-      <TriggerButton />
-    {/if}
-    <LightSwitch />
-  </div>
-</main>
+    </div>
+  </main>
 
-<Modal />
+  <Modal />
+  <svelte:fragment slot="pageFooter">
+    <div class="flex flex-row space-x-4 justify-end items-center p-4">
+      {#if $isAuthenticated}
+        {#if $isPrimaryLandingZoneLoading}
+          <div transition:fade>
+            <ProgressRadial
+              stroke={200}
+              meter="stroke-primary-600 dark:stroke-primary-400"
+              track="stroke-white dark:stroke-black"
+              class="w-6 h-6 mx-1"
+            />
+          </div>
+        {/if}
+        {#if $primaryLandingZone}
+          <div class="text-sm font-bold text-token">
+            {$primaryLandingZone.name}
+          </div>
+          <EditTriggerModal landingZone={$primaryLandingZone} />
+        {/if}
+        <TriggerButton />
+      {/if}
+      <LightSwitch />
+    </div>
+  </svelte:fragment>
+</AppShell>

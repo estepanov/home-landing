@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full w-full">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
@@ -9,7 +9,7 @@
 
 </head>
 
-<body class="h-full w-full">
+<body>
     <!-- ugly fix to get cognito through amplify to not crash app -->
   <!-- Uncaught ReferenceError: global is not defined -->
   <!-- https://stackoverflow.com/questions/69635869/how-do-i-fix-error-with-svelte-kit-and-aws-amplify -->
@@ -18,9 +18,8 @@
     var Buffer = Buffer || []
     var process = process || { env: { DEBUG: undefined }, version: [] }
   </script>
-  <div id="app" class="h-full w-full"></div>
+  <div id="app" style="display: contents" class="h-full overflow-hidden"></div>
   <script type="module" src="/src/main.js"></script>
-
 </body>
 
 </html>
