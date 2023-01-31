@@ -22,7 +22,7 @@ export function NewsStack({ stack, app }: StackContext) {
     schedule: "rate(4 hours)",
     job: {
       function: {
-        handler: "functions/jobs/newsCache.handler",
+        handler: "functions/jobs/newsCache.world",
         environment: {
           NEWS_TABLE_NAME: newsTable.tableName,
         }

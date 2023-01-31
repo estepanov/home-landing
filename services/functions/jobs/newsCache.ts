@@ -2,7 +2,7 @@ import { NewsAPI, NewsCategory, NewsEndpoint, NewsMarkets } from "../../utils/ne
 import { Config } from "@serverless-stack/node/config";
 import dynamodb from "utils/dynamodb";
 
-export async function handler() {
+export async function world() {
     const news = new NewsAPI(Config.NEWS_API_KEY)
     const newsResponse = await news.getNewsData(
         NewsEndpoint.NEWS,

@@ -1,31 +1,15 @@
 import handler from "../../../utils/handler";
-import dynamoDb from "../../../utils/dynamodb";
+import { LandingZonesTable, PrimaryLandngZonesTable } from "../../../utils/Tables"
 
 export const main = handler(async (event) => {
+    const primaryLZItem = await PrimaryLandngZonesTable().getItem(event.requestContext.authorizer?.jwt.claims.sub)
 
-    const params = {
-        TableName: process.env.PRIMARY_LZ_TABLE_NAME,
-        // 'Key' defines the partition key and sort key of the item to be retrieved
-        Key: {
-            userId: event.requestContext.authorizer?.jwt.claims.sub, // The id of the author
-        }
-    };
-
-    const primaryLZItem = await dynamoDb.get(params);
     if (!primaryLZItem.Item || !primaryLZItem.Item.primaryLandingZoneId) {
         return {}
     }
 
-    const lzProps = {
-        TableName: process.env.TABLE_NAME,
-        // 'Key' defines the partition key and sort key of the item to be retrieved
-        Key: {
-            userId: event.requestContext.authorizer?.jwt.claims.sub, // The id of the author
-            homePageId: primaryLZItem.Item.primaryLandingZoneId, // The id of the note from the path
-        },
-    };
+    const result = await LandingZonesTable().getItem(event.requestContext.authorizer?.jwt.claims.sub, primaryLZItem.Item.primaryLandingZoneId)
 
-    const result = await dynamoDb.get(lzProps);
     if (!result.Item) {
         throw new Error("Item not found.");
     }
