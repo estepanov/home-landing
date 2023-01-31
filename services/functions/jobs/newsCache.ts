@@ -41,12 +41,13 @@ export async function handler() {
             Key: queryKey,
             // 'UpdateExpression' defines the attributes to be updated
             // 'ExpressionAttributeValues' defines the value in the update expression
-            UpdateExpression: "SET sourceName = :sourceName, sourceCategory = :sourceCategory, data = :data, updatedAt = :updatedAt",
+            UpdateExpression: "SET #data = :data, updatedAt = :updatedAt",
             ExpressionAttributeValues: {
-                ":sourceName": newsResponse.newsSource,
-                ":sourceCategory": newsResponse.newsCategory,
                 ":data": newsResponse.data,
                 ":updatedAt": new Date().getTime(),
+            },
+            ExpressionAttributeNames: {
+                "#data": "data"
             },
             // 'ReturnValues' specifies if and how to return the item's attributes,
             // where ALL_NEW returns all attributes of the item after the update; you

@@ -19,7 +19,7 @@ export function NewsStack({ stack, app }: StackContext) {
   });
 
   const newsCacheCron = new Cron(stack, "NewsCacheCron", {
-    schedule: "rate(12 hours)",
+    schedule: "rate(4 hours)",
     job: {
       function: {
         handler: "functions/jobs/newsCache.handler",
