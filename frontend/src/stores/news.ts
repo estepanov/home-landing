@@ -65,3 +65,51 @@ export const getWorldNews = async () => {
             newsError.set(err.message);
         })
 };
+
+export const usNewsReqState = writable<NewsRequestStatus>(NewsRequestStatus.INIT);
+
+export const isUSNewsLoading = derived(newsReqState, ($newsReqState) => {
+    return $newsReqState === NewsRequestStatus.LOADING;
+});
+
+export const usNewsError = writable<null | string>(null);
+
+export const usNews = writable<null | News>(null);
+
+export const getUSNews = async () => {
+    usNewsReqState.set(NewsRequestStatus.LOADING)
+    return API.get("news", "news/us", {})
+        .then((data) => {
+            usNewsReqState.set(NewsRequestStatus.COMPLETE)
+            usNews.set(data);
+            return data;
+        })
+        .catch((err) => {
+            usNewsReqState.set(NewsRequestStatus.FAIL)
+            usNewsError.set(err.message);
+        })
+};
+
+export const businessNewsReqState = writable<NewsRequestStatus>(NewsRequestStatus.INIT);
+
+export const isBusinessNewsLoading = derived(businessNewsReqState, ($newsReqState) => {
+    return $newsReqState === NewsRequestStatus.LOADING;
+});
+
+export const businessNewsError = writable<null | string>(null);
+
+export const businessNews = writable<null | News>(null);
+
+export const getBusinessNews = async () => {
+    businessNewsReqState.set(NewsRequestStatus.LOADING)
+    return API.get("news", "news/business", {})
+        .then((data) => {
+            businessNewsReqState.set(NewsRequestStatus.COMPLETE)
+            businessNews.set(data);
+            return data;
+        })
+        .catch((err) => {
+            businessNewsReqState.set(NewsRequestStatus.FAIL)
+            businessNewsError.set(err.message);
+        })
+};

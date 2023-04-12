@@ -83,8 +83,10 @@ export class NewsAPI {
     }
     
     private formatQueryParams(params: QueryParams): string {
-        const queryItems = Object.keys(params)
+        const queryItemKeys = Object.keys(params)
+        const queryItems = queryItemKeys
             .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+
         return queryItems.join('&');
     }
 
@@ -110,7 +112,6 @@ export class NewsAPI {
     public async getNewsData(endpoint:NewsEndpoint, query: QueryParams = DEFAULT_QUERY_PARAMS): Promise<NewsAPIResponse> {
         // The URL for the API call
         const url: string = `${this.endpointUrl(endpoint)}?${this.formatQueryParams(query)}`;
-
         // Make the API call
         const response = await fetch(url, this.header);
 

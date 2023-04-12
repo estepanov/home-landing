@@ -79,7 +79,6 @@ export class DynamoTable {
     }
 
     getItem(partitionKey: string, sortKey?: string) {
-        console.log('tableNameParam', this.tableNameParam)
         return dynamoDb.get({
             ...this.tableNameParam,
             Key: this.formatKeys(partitionKey, sortKey),
@@ -111,5 +110,17 @@ export class DynamoTable {
             ExpressionAttributeNames: this.formatExpressionAttributeNames(item),
             ExpressionAttributeValues: this.formatExpressionAttributeValues(item),
         });
+    }
+
+    putOrUpdateItem(partitionKey: string, sortKey: string, item: any) {
+        return this.getItem(partitionKey, sortKey)
+            .then((data) => {
+                if(data.Item) {
+                    console.log('Item exists, updating...')
+                    return this.updateItem(partitionKey, sortKey, item);
+                }
+                console.log('Item does not exist, creating...')
+                return this.putItem(partitionKey, sortKey, item);
+            });
     }
 }

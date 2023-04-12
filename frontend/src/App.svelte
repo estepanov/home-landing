@@ -1,6 +1,7 @@
 <script module="ts">
   import "./theme.postcss"
-  import "@skeletonlabs/skeleton/themes/theme-gold-nouveau.css"
+  import '@skeletonlabs/skeleton/themes/theme-rocket.css';
+  // import "@skeletonlabs/skeleton/themes/theme-gold-nouveau.css"
   // import "@skeletonlabs/skeleton/themes/theme-skeleton.css"
   import "@skeletonlabs/skeleton/styles/all.css"
   import {
@@ -25,6 +26,8 @@
   import EditTriggerModal from "./lib/landingzone/EditTriggerModal.svelte"
   import { fade } from "svelte/transition"
   import WorldNews from "./lib/widgets/WorldNews.svelte"
+    import UsNews from "./lib/widgets/USNews.svelte"
+    import BusinessNews from "./lib/widgets/BusinessNews.svelte"
   onMount(() => {
     checkCurrentUser().then(async (data) => {
       console.log("data", data)
@@ -69,11 +72,13 @@
       {#if !$isAuthenticated}
         <Login />
       {:else if $primaryLandingZone}
-        <div>
+        <div class="mb-12">
           <Bookmarks bookmarks={$primaryLandingZone.bookmarks} />
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <WorldNews />
+          <UsNews />
+          <BusinessNews />
         </div>
       {/if}
     </div>

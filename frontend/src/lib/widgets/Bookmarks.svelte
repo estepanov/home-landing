@@ -19,7 +19,7 @@
     {#each bookmarks as bookmark (bookmark.id)}
       <li>
         <a 
-          class="flex flex-row justify-center items-center !text-primary-900-50-token bg-surface-300-600-token py-4 text-md md:text-xl rounded-sm decoration-0 transition-all font-semibold tracking-wider !no-underline" 
+          class="flex flex-row justify-center items-center card py-4 text-md md:text-xl rounded-sm decoration-0 transition-all font-semibold tracking-wider !no-underline" 
           href={addProtocolToLink(bookmark.url)}
         >
           <!-- <span class="block pr-4">

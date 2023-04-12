@@ -1,59 +1,35 @@
 import { NewsAPI, NewsCategory, NewsEndpoint, NewsMarkets } from "../../utils/newsAPI";
 import { Config } from "@serverless-stack/node/config";
-import dynamodb from "utils/dynamodb";
+import { NewsCacheTable } from "../../utils/Tables"
 
-export async function world() {
-    const news = new NewsAPI(Config.NEWS_API_KEY)
-    const newsResponse = await news.getNewsData(
-        NewsEndpoint.NEWS,
-        {
-            mkt: NewsMarkets.US,
-            category: NewsCategory.World
-        }
-    )
+const buildCacheFunc = (mkt: NewsMarkets, category: NewsCategory) => {
+    return async () => {
+        const news = new NewsAPI(Config.NEWS_API_KEY)
+        const newsResponse = await news.getNewsData(
+            NewsEndpoint.NEWS,
+            {
+                mkt,
+                category
+            }
+        )
 
-    const queryKey = {
-        sourceName: newsResponse.newsSource,
-        sourceCategory: newsResponse.newsCategory,
-    }
-    const TableName = process.env.NEWS_TABLE_NAME as string;
-
-    const query = await dynamodb.get({
-        TableName,
-        Key: queryKey,
-    })
-
-    if (!query.Item) {
-        console.log('No item found, creating new item')
-        await dynamodb.put({
-            TableName,
-            Item: {
-                sourceName: newsResponse.newsSource,
-                sourceCategory: newsResponse.newsCategory,
+        await NewsCacheTable().putOrUpdateItem(
+            newsResponse.newsSource,
+            newsResponse.newsCategory,
+            {
                 data: newsResponse.data,
                 updatedAt: new Date().getTime()
             }
-        })
-    } else {
-        console.log('Item found, updating item')
-        await dynamodb.update({
-            TableName,
-            Key: queryKey,
-            // 'UpdateExpression' defines the attributes to be updated
-            // 'ExpressionAttributeValues' defines the value in the update expression
-            UpdateExpression: "SET #data = :data, updatedAt = :updatedAt",
-            ExpressionAttributeValues: {
-                ":data": newsResponse.data,
-                ":updatedAt": new Date().getTime(),
-            },
-            ExpressionAttributeNames: {
-                "#data": "data"
-            },
-            // 'ReturnValues' specifies if and how to return the item's attributes,
-            // where ALL_NEW returns all attributes of the item after the update; you
-            // can inspect 'result' below to see how it works with different settings
-            ReturnValues: "ALL_NEW",
-        })
+        )
+
+        return newsResponse
     }
-    return newsResponse
 }
+
+
+export const world = buildCacheFunc(NewsMarkets.US, NewsCategory.World);
+export const us = buildCacheFunc(NewsMarkets.US, NewsCategory.US);
+export const business = buildCacheFunc(NewsMarkets.US, NewsCategory.Business);
+export const us_northeast = buildCacheFunc(NewsMarkets.US, NewsCategory.US_Northeast);
+export const technology = buildCacheFunc(NewsMarkets.US, NewsCategory.Technology);
+export const science = buildCacheFunc(NewsMarkets.US, NewsCategory.Science);

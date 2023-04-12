@@ -7,3 +7,23 @@
 
 html, body { @apply h-full overflow-hidden; }
 
+body { @apply bg-surface-50-900-token; }
+
+body {
+	background-image:
+		radial-gradient(at 0% 0%, rgba(var(--color-secondary-500) / 0.33) 0px, transparent 50%),
+		radial-gradient(at 98% 1%, rgba(var(--color-error-500) / 0.33) 0px, transparent 50%);
+}
+
+@font-face {
+	/* Reference name */
+	font-family: 'Inter';
+	/* For multiple files use commas, ex: url(), url(), ... */
+	src: url('./fonts/Inter-VariableFont_slnt,wght.ttf');
+}
+
+
+:root {
+    --theme-font-family-base: 'Inter', sans-serif;
+    --theme-font-family-heading: 'Inter', sans-serif;
+}
