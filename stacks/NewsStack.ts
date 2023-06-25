@@ -1,5 +1,5 @@
 
-import { Api, Config, Cron, StackContext, use, Table } from "@serverless-stack/resources";
+import { Api, Config, Cron, StackContext, use, Table } from "sst/constructs";
 import { AuthStack } from "./AuthStack";
 import { isProdStage } from "./utils";
 

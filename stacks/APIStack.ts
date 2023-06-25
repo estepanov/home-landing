@@ -1,4 +1,4 @@
-import { Api, StackContext, use } from "@serverless-stack/resources";
+import { Api, StackContext, use } from "sst/constructs";
 import { AuthStack } from "./AuthStack";
 import { DBStack } from "./DBStack";
 import { isProdStage } from "./utils";

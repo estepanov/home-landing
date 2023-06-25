@@ -1,5 +1,5 @@
 
-import { Cognito, StackContext } from "@serverless-stack/resources";
+import { Cognito, StackContext } from "sst/constructs";
 import { UserPool, UserPoolClient } from "aws-cdk-lib/aws-cognito";
 
 export function AuthStack({ stack, app }: StackContext) {

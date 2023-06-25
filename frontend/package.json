@@ -4,13 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "sst-env -- vite",
+    "dev": "sst bind vite dev",
     "dev-basic": "vite dev",
     "build": "vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@serverless-stack/static-site-env": "^1.18.4",
     "@skeletonlabs/skeleton": "^0.99.5",
     "@sveltejs/vite-plugin-svelte": "^2.0.0",
     "@tailwindcss/forms": "^0.5.3",

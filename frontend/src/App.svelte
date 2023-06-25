@@ -75,7 +75,8 @@
         <div class="mb-12">
           <Bookmarks bookmarks={$primaryLandingZone.bookmarks} />
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="flex flex-col">
+        <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 space-x-8"> -->
           <WorldNews />
           <UsNews />
           <BusinessNews />

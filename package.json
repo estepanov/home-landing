@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "sst start",
+    "dev": "sst dev",
     "build": "sst build",
     "deploy": "sst deploy",
     "deploy:prod": "npx sst deploy --stage prod",
@@ -14,16 +14,16 @@
     "test": "sst bind -- vitest run"
   },
   "devDependencies": {
-    "@serverless-stack/cli": "^1.18.4",
-    "@serverless-stack/resources": "^1.18.4",
     "@tsconfig/node16": "^1.0.3",
     "@types/node": "^18.11.18",
     "aws-cdk-lib": "2.50.0",
     "typescript": "^4.9.4",
-    "vitest": "^0.27.3"
+    "vitest": "^0.27.3",
+    "sst": "2.8.20",
+    "constructs": "10.2.24"
   },
   "dependencies": {
-    "@serverless-stack/node": "^1.18.4"
+
   },
   "workspaces": [
     "services"

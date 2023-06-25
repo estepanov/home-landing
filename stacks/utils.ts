@@ -1,3 +1,3 @@
-import { App } from "@serverless-stack/resources";
+import { App } from "sst/constructs";
 
 export const isProdStage = (app: App) => app.stage === "prod";

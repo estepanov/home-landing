@@ -1,4 +1,4 @@
-import { StackContext, Table } from "@serverless-stack/resources";
+import { StackContext, Table } from "sst/constructs";
 
 export function DBStack({ stack }: StackContext) {
   // Create the DynamoDB table

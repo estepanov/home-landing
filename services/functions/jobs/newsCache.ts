@@ -1,5 +1,5 @@
 import { NewsAPI, NewsCategory, NewsEndpoint, NewsMarkets } from "../../utils/newsAPI";
-import { Config } from "@serverless-stack/node/config";
+import { Config } from "sst/node/config";
 import { NewsCacheTable } from "../../utils/Tables"
 
 const buildCacheFunc = (mkt: NewsMarkets, category: NewsCategory) => {
